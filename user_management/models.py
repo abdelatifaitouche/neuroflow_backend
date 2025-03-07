@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from user_management.managers import CustomUserManager
 # Create your models here.
 
 class Departement(models.Model):
@@ -17,6 +18,8 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username' , 'first_name' , 'last_name']
     departement = models.ForeignKey('Departement' , on_delete=models.CASCADE , null=True , blank=True)
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.username

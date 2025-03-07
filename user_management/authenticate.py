@@ -18,8 +18,6 @@ class CustomAuthentication(JWTAuthentication):
     """Custom authentication class"""
     def authenticate(self, request):
 
-
-
         header = self.get_header(request)
         
         if header is None:

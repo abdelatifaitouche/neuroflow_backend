@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework_simplejwt.token_blacklist",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'user_management',
-    'procedureflow'
+    'procedureflow',
 ]
 
 REST_FRAMEWORK = {
@@ -56,7 +57,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token expires in 15 minutes
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Access token expires in 15 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh token expires in 7 days
     'ROTATE_REFRESH_TOKENS': True,  # Allow refresh token rotation
     'BLACKLIST_AFTER_ROTATION': True,  # Blacklist old refresh tokens after rotation

@@ -16,11 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path , include
-from rest_framework_simplejwt.views import TokenObtainPairView , TokenRefreshView
+from rest_framework_simplejwt.views import TokenVerifyView , TokenRefreshView
+from user_management.views import CustomTokenObtainView ,VerifyAuthView , LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', CustomTokenObtainView.as_view(), name='token_obtain_pair'),
+    path('api/auth/verify/' , VerifyAuthView.as_view() , name='auth verify'),
+    path('api/auth/logout/' ,LogoutView.as_view() , name="logout" ),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("api/procedures/" , include("procedureflow.urls"))
 ]

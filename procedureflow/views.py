@@ -8,10 +8,15 @@ from rest_framework.permissions import AllowAny , IsAuthenticated
 from rest_framework import status
 
 from .permissions import *
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+
+from user_management.authenticate import CustomAuthentication
 # Create your views here.
 
 
 class ProcedureListView(APIView):
+    authentication_classes = [CustomAuthentication]
 
     permission_classes = [IsAuthenticated]
 

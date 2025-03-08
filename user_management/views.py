@@ -11,6 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken,AccessToken
 from user_management.authenticate import CustomAuthentication
 
+from user_management.models import Departement
+from user_management.serializers import DepartementSerializer , CustomUserSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from user_management.models import CustomUser
 
 
 class CustomTokenObtainView(TokenObtainPairView):
@@ -41,23 +46,6 @@ class CustomTokenObtainView(TokenObtainPairView):
 
         return response
 
-"""
-class VerifyAuthView(TokenVerifyView):
-    def post(self , request , *args , **kwargs):
-        access_token = request.COOKIES.get("access_token")
-
-        if access_token : 
-
-            data = request.data.copy()
-
-            data['token'] = access_token
-
-            request._full_data = data
-
-        response  = super().post(request , *args , **kwargs)
-        return response
-"""
-
 class VerifyAuthView(TokenVerifyView):
 
     authentication_classes = [CustomAuthentication]
@@ -78,26 +66,6 @@ class VerifyAuthView(TokenVerifyView):
             return Response({"detail": "Token is valid"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
-
-"""
-class LogoutView(APIView) : 
-    def post(self , request , *args , **kwargs):
-
-        response = JsonResponse({'detail': 'Logged out successfully'})
-
-        response.set_cookie(
-            key = 'access_token',  # Name of the cookie to delete
-            value = '',  # Clear the cookie value
-            expires=datetime.now() - timedelta(days=1),  # Set expiration in the past
-            httponly=True, 
-            secure=True, 
-            samesite='Strict',  # Match the attributes of the original cookie
-            path='/'
-        )
-
-        return response
-"""
 
 
 class LogoutView(APIView): 
@@ -146,3 +114,41 @@ class LogoutView(APIView):
 
 
         return response
+    
+
+
+
+
+#api/auth/profile GET ---> validate the token ---> return a user
+
+
+class ProfileViewDetail(APIView):
+
+    authentication_classes = [CustomAuthentication]
+
+    def get(self , request):
+
+        access_token = request.COOKIES.get("access_token")
+
+        user_id = AccessToken(access_token , True)['user_id'] #extract the user id from the access token
+
+        current_user = CustomUser.objects.get(id = user_id)
+
+        current_user_Serializer = CustomUserSerializer(current_user , many = False)
+        
+        return Response({'profileData' : current_user_Serializer.data} , status=status.HTTP_200_OK)
+
+
+
+
+
+class DepartementViewList(APIView):
+    authentication_classes = [CustomAuthentication]
+
+    def get(self , request):
+
+        departements_data = Departement.objects.all()
+
+        departement_serializer = DepartementSerializer(departements_data , many  = True)
+
+        return Response({"departements" : departement_serializer.data} , status= status.HTTP_200_OK)

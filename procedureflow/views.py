@@ -30,7 +30,7 @@ class ProcedureListView(APIView):
         if department:= request.query_params.get('department'):
             filters['department'] = department
         
-        query_set = Procedure.objects.filter(**filters)
+        query_set = Procedure.objects.filter(**filters).order_by("-created_at")
 
         
         procedures_serializer = ProcedureSerializer(query_set , many = True)

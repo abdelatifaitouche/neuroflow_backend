@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import dj_database_url
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -114,6 +114,23 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASES["default"] = dj_database_url.parse("postgresql://neuroflow_manager:NRe8XJQREodN7mHr1Z1P9vPNJjHpxUK7@dpg-cv614pogph6c73dj1hn0-a.oregon-postgres.render.com/neuroflow_db")
+
+"""
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'neuroflow_db',
+        'USER': 'neuroflow_manager',
+        'PASSWORD': 'NRe8XJQREodN7mHr1Z1P9vPNJjHpxUK7',
+        'HOST': 'dpg-cv614pogph6c73dj1hn0-a',
+        'PORT': '5432',
+    }
+}
+"""
+
 
 
 # Password validation

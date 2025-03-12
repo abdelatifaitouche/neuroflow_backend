@@ -9,7 +9,7 @@ from django.contrib.auth.admin import UserAdmin
 class CustomUserAdmin(UserAdmin):
     # Fields to display in the admin
     model = CustomUser
-    list_display = ['email', 'first_name', 'last_name', 'is_staff', 'is_active','departement', 'date_joined']
+    list_display = ['email', 'first_name', 'last_name', 'is_staff', 'is_active','departement', 'date_joined' , 'role']
     list_filter = ['is_staff', 'is_active']
     search_fields = ['email', 'first_name', 'last_name']
 
@@ -24,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
     # The fields to be used in the form for editing an existing user
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('first_name', 'last_name' , 'departement')}),
+        ('Personal Info', {'fields': ('first_name','username', 'last_name' , 'departement' , 'role')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important Dates', {'fields': ('last_login', 'date_joined')}),
     )

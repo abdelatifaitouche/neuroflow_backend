@@ -35,10 +35,15 @@ class ProcedureStep(models.Model):
     procedure = models.ForeignKey(Procedure, on_delete=models.CASCADE, related_name="steps")
     step_number = models.PositiveIntegerField()  # Defines the order of steps
     title = models.CharField(max_length=255)
-    content = models.TextField()  # Rich Text content for the step
+    content = models.TextField(blank=True,null=True)  # Rich Text content for the step
     writer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="written_steps")
     validator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="validated_steps")
     is_validated = models.BooleanField(default=False)  # Step validation status
+    status = models.CharField(
+        max_length=20,
+        choices=[('Draft', 'Draft'), ('Pending Approval', 'Pending Approval'), ('Done', 'Done')],
+        default='Draft'
+    )
 
     class Meta:
         ordering = ['step_number']  # Ensure steps are always retrieved in order

@@ -8,17 +8,16 @@ from rest_framework.permissions import AllowAny , IsAuthenticated
 from rest_framework import status
 
 from .permissions import *
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 from user_management.authenticate import CustomAuthentication
 # Create your views here.
 
 
+
 class ProcedureListView(APIView):
     authentication_classes = [CustomAuthentication]
 
-    permission_classes = [IsAuthenticated]
 
     def get(self ,request):
 
@@ -48,8 +47,7 @@ class ProcedureListView(APIView):
 
 
 class ProcedureDetailView(APIView):
-
-    permission_classes = [AllowAny]        
+    authentication_classes = [CustomAuthentication]
     def get(self , request , pk):
         procedure_model = get_object_or_404(Procedure , pk = pk)
 
@@ -90,11 +88,10 @@ class ProcedureDetailView(APIView):
         
         return Response({"response" : procedure_serializer.errors} , status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self , request , pk):
-        procedure_model = get_object_or_404(Procedure , pk = pk)
-        procedure_model.delete()
-        return Response({"response" : "Procedure Deleted"} , status=status.HTTP_200_OK)
-    
+    def delete(self, request, pk):
+        procedure = get_object_or_404(Procedure, pk=pk)
+        procedure.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
                 
@@ -102,11 +99,13 @@ class ProcedureDetailView(APIView):
 
 
 class ProcedureStepListView(APIView):
-    permission_classes = [UpdatePermissions , IsAuthenticated]
+
+    authentication_classes = [CustomAuthentication]
+
     def get(self , request , pk):
         procedure_steps_model = ProcedureStep.objects.filter(procedure = pk)
 
-        self.check_object_permissions(request , procedure_steps_model)
+        #self.check_object_permissions(request , procedure_steps_model)
 
         procedure_steps_serializer = ProcedureStepSerializer(procedure_steps_model , many = True)
 
@@ -114,11 +113,48 @@ class ProcedureStepListView(APIView):
     
 
 
-    def post(self , request):
+    def post(self , request , pk):
         procedure_step_serializer = ProcedureStepSerializer(data = request.data)
 
         if procedure_step_serializer.is_valid():
             procedure_step_serializer.save()
             return Response({"response" : procedure_step_serializer.data} , status=status.HTTP_201_CREATED)
-        
+        print(procedure_step_serializer.errors)
         return Response({"response" : procedure_step_serializer.errors} , status = status.HTTP_400_BAD_REQUEST)
+    
+
+
+class StepDetailView(APIView):
+    authentication_classes = [CustomAuthentication]
+
+
+    def get(self , request , step_id):
+        
+        step_model = ProcedureStep.objects.get(id = step_id)
+
+        step_serializer = ProcedureStepSerializer(step_model , many = False)
+
+        return Response({'response' : step_serializer.data} , status=status.HTTP_200_OK)
+    
+
+
+    def post(self , request , pk):
+        return
+    
+
+    def delete(self , request , pk):
+        return 
+    
+
+
+    def put(self , request , pk):
+        return 
+    
+
+    def patch(self , request , pk):
+        return
+
+
+
+
+

@@ -115,9 +115,10 @@ DATABASES = {
     }
 }
 
+"""
 DATABASES["default"] = dj_database_url.parse("postgresql://neuroflow_manager:NRe8XJQREodN7mHr1Z1P9vPNJjHpxUK7@dpg-cv614pogph6c73dj1hn0-a.oregon-postgres.render.com/neuroflow_db")
 
-"""
+
 
 DATABASES = {
     'default': {

@@ -14,4 +14,4 @@ class DepartementSerializer(ModelSerializer):
 class CustomUserSerializer(ModelSerializer):
     class Meta : 
         model = CustomUser
-        fields = ["id" , "username" , "email"]
+        fields = ["id" , "username" ,'departement', "email" , 'role']

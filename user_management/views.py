@@ -152,3 +152,16 @@ class DepartementViewList(APIView):
         departement_serializer = DepartementSerializer(departements_data , many  = True)
 
         return Response({"departements" : departement_serializer.data} , status= status.HTTP_200_OK)
+    
+
+
+class UsersViewList(APIView):
+    
+    authentication_classes = [CustomAuthentication]
+    def get(self , request):
+
+        users = CustomUser.objects.all()
+
+        user_serializer = CustomUserSerializer(users , many = True)
+
+        return Response({"users" : user_serializer.data})

@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from rest_framework_simplejwt.views import TokenVerifyView , TokenRefreshView
-from user_management.views import CustomTokenObtainView ,VerifyAuthView , LogoutView , DepartementViewList , ProfileViewDetail
+from user_management.views import CustomTokenObtainView ,VerifyAuthView , LogoutView , DepartementViewList , ProfileViewDetail , UsersViewList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/auth/logout/' ,LogoutView.as_view() , name="logout" ),
     path('api/auth/profile/' , ProfileViewDetail.as_view() , name="profile" ),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/users/users_list/' , UsersViewList.as_view() , name="users"),
 
     path('api/departements/departements_list' , DepartementViewList.as_view() , name="departements"),
     path("api/procedures/" , include("procedureflow.urls"))

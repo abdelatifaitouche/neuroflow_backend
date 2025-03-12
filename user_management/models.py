@@ -21,6 +21,13 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
+    role = models.CharField(
+        max_length=20,
+        choices=[('Admin', 'Admin'), ('Employee', 'Employee')],
+        default='Employee',
+        null=True,
+        blank=True
+    )
     def __str__(self):
         return self.username
 

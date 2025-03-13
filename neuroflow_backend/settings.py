@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'user_management',
     'procedureflow',
+    'teamflow'
 ]
 
 REST_FRAMEWORK = {

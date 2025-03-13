@@ -29,5 +29,6 @@ urlpatterns = [
     path('api/users/users_list/' , UsersViewList.as_view() , name="users"),
 
     path('api/departements/departements_list' , DepartementViewList.as_view() , name="departements"),
-    path("api/procedures/" , include("procedureflow.urls"))
+    path("api/procedures/" , include("procedureflow.urls")),
+    path('api/teamflow/' , include('teamflow.urls'))
 ]

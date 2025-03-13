@@ -25,12 +25,7 @@ class ProcedureFactory :
         
         if procedure.status == "Executed":
             return 
-
-
         serializer = ProcedureSerializer(procedure , data = data , partial = True)
-
-
-
         if serializer.is_valid():
             return serializer.save()
 

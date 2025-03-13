@@ -13,7 +13,7 @@ class Procedure(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="procedures" , null=True , blank=True)
     status = models.CharField(
         max_length=20,
-        choices=[('Draft', 'Draft'), ('Pending Approval', 'Pending Approval'), ('Active', 'Active'), ('Archived', 'Archived')],
+        choices=[('Draft', 'Draft'), ('Pending Approval', 'Pending Approval'), ('Active', 'Active'), ('Executed', 'Executed')],
         default='Draft'
     )
     created_at = models.DateTimeField(auto_now_add=True)

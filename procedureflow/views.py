@@ -11,6 +11,7 @@ from .permissions import *
 
 
 from user_management.authenticate import CustomAuthentication
+from .factories import ProcedureFactory
 # Create your views here.
 
 
@@ -37,13 +38,11 @@ class ProcedureListView(APIView):
     
     def post(self , request):
 
-        data = request.data
-        procedure_serializer = ProcedureSerializer(data = data)
-        if procedure_serializer.is_valid():
-            procedure_serializer.validated_data['owner'] = request.user
-            procedure_serializer.save()
-            return Response({"response" : procedure_serializer.data} , status=status.HTTP_201_CREATED)
-        return Response({"response" : procedure_serializer.errors} , status=status.HTTP_400_BAD_REQUEST)
+        procedure = ProcedureFactory.create_procedure(request.data , request.user) #factory handling the creaiton of procedure
+        if procedure : 
+            return Response({"response" : ProcedureSerializer(procedure).data} , status=status.HTTP_201_CREATED)
+        
+        return Response({'response' : "invalid data"} , status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProcedureDetailView(APIView):
@@ -65,29 +64,29 @@ class ProcedureDetailView(APIView):
     def put(self , request , pk):
 
         procedure_model = get_object_or_404(Procedure , pk = pk)
-
-        procedure_serializer = ProcedureSerializer(instance = procedure_model , data = request.data)
-
-        if procedure_serializer.is_valid():
-            procedure_serializer.save()
-            return Response({"response" : procedure_serializer.data} , status=status.HTTP_201_CREATED)
         
-        return Response({"response" : procedure_serializer.errors} , status=status.HTTP_400_BAD_REQUEST)
+        procedure = ProcedureFactory.update_procedure(procedure_model , request.data)
 
+        if procedure : 
+            return Response({"response": ProcedureSerializer(procedure).data}, status=status.HTTP_201_CREATED)
+
+        return Response({"response" : "invalid data"} , status=status.HTTP_400_BAD_REQUEST)
+
+       
 
         
     
     def patch(self , request , pk):
         procedure_model = get_object_or_404(Procedure , pk = pk)
 
-        procedure_serializer = ProcedureSerializer(instance = procedure_model , data = request.data , partial = True)
+        procedure = ProcedureFactory.update_procedure(procedure_model , request.data)
 
-        if procedure_serializer.is_valid():
-            procedure_serializer.save()
-            return Response({"response" : procedure_serializer.data} , status=status.HTTP_201_CREATED)
-        print(procedure_serializer.error_messages)
-        return Response({"response" : procedure_serializer.errors} , status=status.HTTP_400_BAD_REQUEST)
-    
+        if procedure : 
+            return Response({"response": ProcedureSerializer(procedure).data}, status=status.HTTP_201_CREATED)
+
+        return Response({"response" : "invalid data"} , status=status.HTTP_400_BAD_REQUEST)
+   
+   
     def delete(self, request, pk):
         procedure = get_object_or_404(Procedure, pk=pk)
         procedure.delete()

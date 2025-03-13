@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -24,3 +24,33 @@ class ProcessListView(APIView):
 
 
         return Response({'response' : process_serializer.errors} , status = status.HTTP_400_BAD_REQUEST)
+
+
+
+class ProcessDetailView(APIView):
+
+    def get(self, request, pk):
+        process = get_object_or_404(Process, pk=pk)
+        serializer = ProcessSerializer(process)
+        return Response({'response': serializer.data}, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        process = get_object_or_404(Process, pk=pk)
+        serializer = ProcessSerializer(process, data=request.data)  # Full update
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'response': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'response': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk):
+        process = get_object_or_404(Process, pk=pk)
+        serializer = ProcessSerializer(process, data=request.data, partial=True)  # Partial update
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'response': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'response': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        process = get_object_or_404(Process, pk=pk)
+        process.delete()
+        return Response({'response': "deleted"}, status=status.HTTP_204_NO_CONTENT)

@@ -85,7 +85,7 @@ class ProcedureDetailView(APIView):
         if procedure_serializer.is_valid():
             procedure_serializer.save()
             return Response({"response" : procedure_serializer.data} , status=status.HTTP_201_CREATED)
-        
+        print(procedure_serializer.error_messages)
         return Response({"response" : procedure_serializer.errors} , status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):
